@@ -1,0 +1,116 @@
+---
+
+---
+
+<section class="items-center mx-auto py-10 text-center w-full">
+  <div
+    class="flex flex-row flex-wrap px-8 items-center justify-center gap-8 w-full"
+  >
+    <div class="m-8 text-left">
+      <h2 class="text-6xl xl:text-4xl font-bold text-theme-verdigris">Preguntas Frecuentes</h2>
+      <p class="mt-2 text-2xl xl:text-xl text-theme-rich-black font-regular">
+        ¿Tienes alguna otra duda? Llámanos 
+        <br> al <strong class="text-theme-verdigris">51+ 951 011 604</strong>
+      </p>
+    </div>
+
+    <div class="mt-6 space-y-4 text-left w-full max-w-xl">
+      <details
+        class="group bg-theme-sky-blue rounded-3xl text-theme-rich-black px-4 py-3 transition-all duration-300"
+        data-open="false"
+      >
+        <summary
+          class="cursor-pointer flex justify-between items-center font-medium text-lg"
+        >
+          <span>1. ¿Qué es PECO</span>
+          <span>▼</span>
+        </summary>
+        <div
+          class="transition-all duration-500 overflow-hidden mt-4 text-sm text-gray-700"
+        >
+          <p class="p-3 bg-theme-white-smoke rounded-lg">
+            PECO es una plataforma que optimiza la distribución de productos perecibles —como el pescado fresco— mediante algoritmos evolutivos, garantizando rutas eficientes y entregas en frío más rápidas.
+          </p>
+        </div>
+      </details>
+
+      <details
+        class="bg-theme-sky-blue rounded-3xl text-theme-rich-black px-4 py-3"
+      >
+        <summary
+          class="cursor-pointer font-medium flex justify-between items-center text-lg"
+        >
+          <span>2. ¿A quién está dirigida esta solución?</span>
+          <span>▼</span>
+        </summary>
+        <div
+          class="transition-all duration-500 overflow-hidden mt-4 text-sm text-gray-700"
+        >
+          <p class="p-3 bg-theme-white-smoke rounded-lg">
+            Nuestra solución está pensada para empresas del rubro pesquero que buscan optimizar su logística diaria, reducir costos operativos y mantener la frescura de sus productos en cada entrega.
+          </p>
+        </div>
+      </details>
+
+      <details
+        class="bg-theme-sky-blue rounded-3xl text-theme-rich-black px-4 py-3"
+      >
+        <summary
+          class="cursor-pointer font-medium flex justify-between items-center text-lg"
+        >
+          <span>3. ¿Cómo ayuda PECO a mejorar mis entregas?</span>
+          <span>▼</span>
+        </summary>
+        <div
+          class="transition-all duration-500 overflow-hidden mt-4 text-sm text-gray-700"
+        >
+          <p class="p-3 bg-theme-white-smoke rounded-lg">
+            Usamos datos reales y modelos de optimización para generar rutas más cortas, minimizar el uso de combustible y asegurar que los productos lleguen frescos, sin romper la cadena de frío.
+          </p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+<style>
+  summary::marker {
+    display: none;
+  }
+</style>
+<script>
+  // Controla la animación suave al abrir/cerrar
+  document.querySelectorAll("details").forEach((detail) => {
+    const summary = detail.querySelector("summary");
+    const content = detail.querySelector("div");
+    if (!summary) return;
+    const icon = summary.querySelector("svg");
+
+    summary.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isOpen = detail.hasAttribute("open");
+
+      // Cierre suave
+      if (isOpen) {
+        if (content) {
+          content.style.maxHeight = content.scrollHeight + "px";
+          requestAnimationFrame(() => {
+            content.style.maxHeight = "0px";
+          });
+        }
+        if (icon) icon.classList.remove("rotate-180");
+        setTimeout(() => detail.removeAttribute("open"), 500);
+      }
+      // Apertura suave
+      else {
+        detail.setAttribute("open", "");
+        if (content) {
+          content.style.maxHeight = "0px";
+          requestAnimationFrame(() => {
+            content.style.maxHeight = content.scrollHeight + "px";
+          });
+        }
+        if (icon) icon.classList.add("rotate-180");
+      }
+    });
+  });
+</script>

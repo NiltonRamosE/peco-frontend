@@ -1,0 +1,68 @@
+---
+import ScrollingBanner from "@/landing/components/ScrollingBanner.astro";
+import SolutionCard from "@/landing/components/SolutionCard.astro";
+
+const frases = [
+  "¿Y cómo optimizamos la cadena de frío? ❄️",
+  "Con rutas inteligentes y datos reales 📊.",
+  "¿Distribución lenta o ineficiente? Te ayudamos a resolverlo 🛠️.",
+  "La inteligencia evolutiva mejora tu logística cada día 🤖.",
+];
+
+---
+
+<section class="flex-col items-center justify-center">
+  <ScrollingBanner phrases={frases} />
+
+  <div class="text-center mt-10 mb-4">
+    <h3 class="text-3xl lg:text-5xl font-semibold">Nuestras Soluciones</h3>
+    <p class="text-lg lg:text-2xl text-theme-rich-black font-regular">
+      Para empresas o marca
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 max-w-6xl mx-auto mb-12 px-5 sm:px-30 md:px-50 lg:px-5">
+    <SolutionCard
+      image="/images/icon-solution-1.svg"
+      title="Rutas logísticas inteligentes"
+      description="Optimiza tus entregas con tecnología evolutiva y mejora tu eficiencia operativa."
+      aditionalclass="rounded-t-2xl lg:rounded-none"
+    />
+    <SolutionCard
+      image="/images/icon-solution-2.svg"
+      title="Control de cadena de frío"
+      description="Asegura la frescura del producto con monitoreo y tiempos de entrega optimizados."
+    />
+    <SolutionCard
+      image="/images/icon-solution-3.svg"
+      title="Análisis en tiempo real"
+      description="Toma decisiones con datos actualizados sobre entregas, rutas y rendimiento."
+      aditionalclass="rounded-b-2xl lg:rounded-none"
+    />
+  </div>
+
+  <div class="text-center mt-10 mb-4">
+    <h3 class="text-3xl lg:text-5xl font-semibold">Nuestras Soluciones</h3>
+    <p class="text-lg lg:text-2xl text-theme-rich-black font-regular">Para usuarios</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 max-w-6xl mx-auto px-5 sm:px-30 md:px-50 lg:px-5">
+    <SolutionCard
+      image="/images/icon-solution-4.svg"
+      title="Frescura garantizada"
+      description="Recibe productos del mar con calidad certificada y tiempos de entrega confiables."
+      aditionalclass="rounded-t-2xl lg:rounded-none"
+    />
+    <SolutionCard
+      image="/images/icon-solution-5.svg"
+      title="Transparencia en el origen"
+      description="Conoce de dónde viene lo que consumes y cómo llegó a tus manos."
+    />
+    <SolutionCard
+      image="/images/icon-solution-6.svg"
+      title="Confianza y trazabilidad"
+      description="Accede a información verificada sobre cada envío y disfruta con tranquilidad."
+      aditionalclass="rounded-b-2xl lg:rounded-none"
+    />
+  </div>
+</section>
