@@ -1,0 +1,26 @@
+---
+import PublicLayout from '@/layouts/PublicLayout.astro';
+import HeroSection from '@/landing/sections/HeroSection.astro';
+import MessageSection from '@/landing/sections/MessageSection.astro';
+import PartnerSection from '@/landing/sections/PartnerSection.astro';
+import ProposalSection from '@/landing/sections/ProposalSection.astro';
+import FAQSection from '@/landing/sections/FAQSection.astro';
+import ContactSection from '@/landing/sections/ContactSection.astro';
+
+const robots = ["index", "follow"];
+const title = "PECO";
+const description = "PECO es una plataforma que conecta a los consumidores con productos del mar frescos y de calidad, garantizando la transparencia en el origen y la cadena de frío.";
+const keywords = ["PECO", "productos del mar", "cadena de frío", "transparencia en el origen", "logística inteligente"];
+const url = "https://peco.vercel.app";
+const imageOG = "/card-twt.webp";
+const imagetwt = "/card-twt.webp";
+---
+
+<PublicLayout {robots} {title} {description} {keywords} {url} {imageOG} {imagetwt}>
+	<HeroSection />
+	<MessageSection />
+	<PartnerSection />
+	<ProposalSection />
+	<FAQSection />
+	<ContactSection />
+</PublicLayout>
