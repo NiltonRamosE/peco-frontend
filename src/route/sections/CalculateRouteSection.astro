@@ -1,69 +1,150 @@
 ---
 ---
 
-
 <section class="pt-25 md:pt-20 ml-0 px-0 sm:px-4 md:ml-12 md:px-8 2xl:ml-24">
-  <div class="max-w-4xl mx-auto">
-    <h2 class="text-4xl font-bold mb-6 text-theme-verdigris">Calcular Ruta</h2>
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-4xl font-bold mb-8 text-theme-verdigris">Calcular Ruta</h2>
 
-    <form id="rutaForm" class="space-y-4">
-      <label class="block">
-        <span class="text-lg">Capacidad por vehículo (kg)</span>
-        <input type="number" name="capacidad" class="input" value="30" required />
-      </label>
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Formulario -->
+      <div class="lg:w-1/2">
+        <form id="rutaForm" class="p-6 bg-white rounded-xl shadow-md sticky top-4">
+          <!-- Capacidad por vehículo -->
+          <div class="mb-6">
+            <label for="capacidad" class="block text-sm font-medium text-gray-700 mb-1">
+              Capacidad por vehículo (kg)
+              <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="number" 
+              id="capacidad" 
+              name="capacidad" 
+              value="30" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            >
+          </div>
 
-      <label class="block">
-        <span class="text-lg">Número de vehículos</span>
-        <input type="number" name="vehiculos" class="input" value="2" required />
-      </label>
+          <!-- Número de vehículos -->
+          <div class="mb-6">
+            <label for="vehiculos" class="block text-sm font-medium text-gray-700 mb-1">
+              Número de vehículos
+              <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="number" 
+              id="vehiculos" 
+              name="vehiculos" 
+              value="2" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            >
+          </div>
 
-      <label class="block">
-        <span class="text-lg">Velocidad promedio (km/h)</span>
-        <input type="number" step="0.1" name="velocidad" class="input" value="10" required />
-      </label>
+          <!-- Velocidad promedio -->
+          <div class="mb-6">
+            <label for="velocidad" class="block text-sm font-medium text-gray-700 mb-1">
+              Velocidad promedio (km/h)
+              <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="number" 
+              step="0.1" 
+              id="velocidad" 
+              name="velocidad" 
+              value="10" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            >
+          </div>
 
-      <label class="block">
-        <span class="text-lg">Tiempo máximo de ruta (horas)</span>
-        <input type="number" step="0.1" name="tiempo" class="input" value="2.5" required />
-      </label>
+          <!-- Tiempo máximo de ruta -->
+          <div class="mb-6">
+            <label for="tiempo" class="block text-sm font-medium text-gray-700 mb-1">
+              Tiempo máximo de ruta (horas)
+              <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="number" 
+              step="0.1" 
+              id="tiempo" 
+              name="tiempo" 
+              value="2.5" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            >
+          </div>
 
-      <label class="block">
-        <span class="text-lg">Selecciona el depósito</span>
-        <select name="deposito" class="input" required>
-          <option value="0">Depósito A (Puerto)</option>
-          <option value="1">Depósito B (Mercado 1)</option>
-          <option value="2">Depósito C (Mercado 2)</option>
-          <option value="3">Depósito D (Almacén)</option>
-        </select>
-      </label>
+          <!-- Selección de depósito -->
+          <div class="mb-8">
+            <label for="deposito" class="block text-sm font-medium text-gray-700 mb-1">
+              Selecciona el depósito
+              <span class="text-red-500">*</span>
+            </label>
+            <select 
+              id="deposito" 
+              name="deposito" 
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            >
+              <option value="1">Depósito A</option>
+              <option value="2">Depósito B</option>
+              <option value="3">Depósito C</option>
+            </select>
+          </div>
 
-      <button type="submit" class="bg-theme-verdigris text-white px-4 py-2 rounded mt-4">
-        Calcular Ruta
-      </button>
-    </form>
+          <!-- Botón de envío -->
+          <button 
+            type="submit" 
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Calcular Ruta
+          </button>
+        </form>
+      </div>
 
-    <div id="resultado" class="mt-8 text-lg text-gray-800"></div>
+      <!-- Mapa y Resultados -->
+      <div class="lg:w-1/2 relative">
+        <!-- Mapa -->
+        <div id="map" class="w-full h-[500px] rounded-lg border border-gray-300 shadow-sm relative"></div>
+        
+        <!-- Resultado como ventana flotante -->
+        <div id="resultado" class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-gray-200 z-10 transition-all duration-300 opacity-0 invisible max-h-[40%] overflow-y-auto">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="font-bold text-lg text-gray-800">Resultados de la Ruta</h3>
+            <button id="cerrarResultado" class="text-gray-500 hover:text-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+          <div class="text-gray-700 space-y-2" id="resultadoContenido"></div>
+        </div>
+      </div>
+    </div>
   </div>
+</section>
 
   <style>
-    .input {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 0.5rem;
-      margin-top: 0.5rem;
+    #map {
+      min-height: 400px;
+      min-width: 100%;
+      position: relative;
+      z-index: 0;
     }
   </style>
+
+  <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 
   <script is:inline>
     const form = document.querySelector('#rutaForm');
     const resultado = document.querySelector('#resultado');
 
     const puntos = [
-      { id: 0, x: 0.0, y: 0.0, demanda: 0 },
-      { id: 1, x: 1.0, y: 1.0, demanda: 20 },
-      { id: 2, x: 2.0, y: 0.0, demanda: 15 },
-      { id: 3, x: 0.0, y: 2.0, demanda: 10 }
+      { id: 0, nombre: 'INICIO - FIN', x: -9.0851, y: -78.5936 },
+      { id: 1, nombre: 'Depósito A', x: -9.0743, y: -78.5980 },
+      { id: 2, nombre: 'Depósito B', x: -9.0722, y: -78.5905 },
+      { id: 3, nombre: 'Depósito C', x: -9.0814, y: -78.5852 }
     ];
 
     const matriz = [
@@ -73,8 +154,57 @@
       [2.0, 2.2, 2.8, 0]
     ];
 
+    let map;
+    let routeLayerIdCounter = 0;
+    const layerIds = [];
+    const arrowIconUrl = 'https://cdn-icons-png.flaticon.com/512/271/271228.png';
+
+    function cargarFlecha() {
+      if (map.hasImage('arrow')) return;
+      map.loadImage(arrowIconUrl, (error, image) => {
+        if (error) {
+          console.error('Error al cargar flecha:', error);
+          return;
+        }
+        map.addImage('arrow', image);
+      });
+    }
+
+    function limpiarRutasPrevias() {
+      layerIds.forEach(id => {
+        if (map.getLayer(id)) map.removeLayer(id);
+        if (map.getSource(id)) map.removeSource(id);
+        if (map.getLayer(id + '-arrow')) map.removeLayer(id + '-arrow');
+      });
+      layerIds.length = 0;
+    }
+
+    window.addEventListener('load', () => {
+      map = new maplibregl.Map({
+        container: 'map',
+        style: 'https://demotiles.maplibre.org/style.json',
+        center: [-78.5936, -9.0851],
+        zoom: 13
+      });
+
+      map.addControl(new maplibregl.NavigationControl());
+
+      puntos.forEach(p => {
+        const marker = new maplibregl.Marker({
+          color: p.id === 0 ? '#2ecc71' : '#e74c3c'
+        })
+          .setLngLat([p.y, p.x])
+          .setPopup(new maplibregl.Popup().setText(p.nombre))
+          .addTo(map);
+      });
+
+
+      cargarFlecha();
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      limpiarRutasPrevias();
 
       const data = new FormData(form);
       const capacidad = parseInt(data.get('capacidad'));
@@ -83,8 +213,15 @@
       const tiempo = parseFloat(data.get('tiempo'));
       const deposito = parseInt(data.get('deposito'));
 
+      const puntosParaEnvio = puntos.map(p => ({
+        id: p.id,
+        x: p.x,
+        y: p.y,
+        demanda: p.demanda || 0
+      }));
+
       const body = {
-        puntos,
+        puntos: puntosParaEnvio,
         deposito_id: deposito,
         capacidad_vehiculo: capacidad,
         numero_vehiculos: vehiculos,
@@ -93,10 +230,17 @@
         matriz_distancias: matriz
       };
 
-      resultado.innerHTML = "Calculando ruta...";
+      // Mostrar estado de carga en la ventana flotante
+      const resultadoContenido = document.getElementById('resultadoContenido');
+      resultadoContenido.innerHTML = '<div class="flex justify-center py-4"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
+      
+      // Mostrar ventana de resultados
+      const resultado = document.getElementById('resultado');
+      resultado.classList.remove('opacity-0', 'invisible');
+      resultado.classList.add('opacity-100', 'visible');
 
       try {
-        const res = await fetch('https://peco-backend-795306361872.europe-west1.run.app/resolver', {
+        const res = await fetch('https://peco-backend-795306361872.southamerica-east1.run.app/resolver', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(body)
@@ -104,24 +248,169 @@
 
         if (!res.ok) {
           const error = await res.json();
-          resultado.innerHTML = `<span class="text-red-600 font-bold">Error ${res.status}: ${error.detail}</span>`;
+          resultadoContenido.innerHTML = `<div class="text-red-600 font-bold p-2 bg-red-50 rounded">Error ${res.status}: ${error.detail}</div>`;
           return;
         }
 
         const json = await res.json();
 
-        resultado.innerHTML = `
-          <p><strong>Rutas generadas:</strong></p>
-          <ul class="list-disc ml-5">
-            ${json.rutas.map((ruta, i) => `<li>Camión ${i + 1}: ${ruta.join(' → ')}</li>`).join('')}
-          </ul>
-          <p class="mt-2">Distancia total: <strong>${json.distancia_total.toFixed(2)} km</strong></p>
-          <p>Tiempo máximo por camión: <strong>${json.tiempo_maximo_camion.toFixed(2)} h</strong></p>
-          <p>Generaciones procesadas: <strong>${json.generaciones}</strong></p>
+        // Mostrar resultados en formato mejorado
+        resultadoContenido.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex justify-between items-start">
+              <h4 class="font-semibold text-gray-900">Resultados del enrutamiento</h4>
+              <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">${new Date().toLocaleTimeString()}</span>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-2">
+              ${json.rutas.map((ruta, i) => `
+                <div class="border-l-4 border-blue-500 pl-3">
+                  <div class="flex items-center justify-between">
+                    <span class="font-medium">Camión ${i + 1}:</span>
+                    <span class="text-sm text-gray-600">${ruta.length} paradas</span>
+                  </div>
+                  <div class="text-sm text-gray-700 mt-1 truncate" title="${ruta.join(' → ')}">
+                    ${ruta.join(' → ')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="pt-2 mt-2 border-t border-gray-200 space-y-1">
+              <div class="flex justify-between">
+                <span>Distancia total:</span>
+                <span class="font-medium">${json.distancia_total.toFixed(2)} km</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Tiempo máximo:</span>
+                <span class="font-medium">${json.tiempo_maximo_camion.toFixed(2)} h</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Generaciones:</span>
+                <span class="font-medium">${json.generaciones}</span>
+              </div>
+            </div>
+          </div>
         `;
+
+        // Dibujar rutas en el mapa
+        json.rutas.forEach((ruta, i) => {
+          const coords = [
+            [puntos[0].y, puntos[0].x],
+            ...ruta.map(id => [puntos[id].y, puntos[id].x]),
+            [puntos[0].y, puntos[0].x]
+          ];
+
+          const geojson = {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: coords
+            }
+          };
+
+          const layerId = `ruta-${routeLayerIdCounter++}`;
+          layerIds.push(layerId);
+
+          map.addSource(layerId, {
+            type: 'geojson',
+            data: geojson
+          });
+
+          map.addLayer({
+            id: layerId,
+            type: 'line',
+            source: layerId,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round'
+            },
+            paint: {
+              'line-color': `hsl(${(i * 360 / json.rutas.length)}, 70%, 50%)`, // Colores distintos por ruta
+              'line-width': 4,
+              'line-dasharray': i % 2 === 0 ? [1, 0] : [2, 2] // Estilos alternados
+            }
+          });
+
+          // Añadir flechas de dirección
+          map.addLayer({
+            id: `${layerId}-arrow`,
+            type: 'symbol',
+            source: layerId,
+            layout: {
+              'symbol-placement': 'line',
+              'symbol-spacing': 50,
+              'icon-image': 'arrow',
+              'icon-size': 0.05,
+              'icon-allow-overlap': true,
+              'icon-ignore-placement': true
+            }
+          });
+
+          // Añadir etiquetas de número de ruta
+          ruta.forEach((id, idx) => {
+            const labelLayerId = `${layerId}-label-${idx}`;
+            map.addSource(labelLayerId, {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [puntos[id].y, puntos[id].x]
+                },
+                properties: {
+                  title: `${i+1}`
+                }
+              }
+            });
+            
+            map.addLayer({
+              id: labelLayerId,
+              type: 'symbol',
+              source: labelLayerId,
+              layout: {
+                'text-field': ['get', 'title'],
+                'text-size': 12,
+                'text-offset': [0, 0.6],
+                'text-anchor': 'top'
+              },
+              paint: {
+                'text-color': '#ffffff',
+                'text-halo-color': `hsl(${(i * 360 / json.rutas.length)}, 70%, 50%)`,
+                'text-halo-width': 2
+              }
+            });
+            layerIds.push(labelLayerId);
+          });
+        });
+
+        // Ajustar vista del mapa para mostrar todas las rutas
+        if (json.rutas.length > 0 && puntos.length > 0) {
+          const allCoords = json.rutas.flatMap(ruta => 
+            ruta.map(id => [puntos[id].y, puntos[id].x])
+          ).concat([[puntos[0].y, puntos[0].x]]);
+          
+          const bounds = allCoords.reduce((bounds, coord) => {
+            return bounds.extend(coord);
+          }, new maplibregl.LngLatBounds(allCoords[0], allCoords[0]));
+
+          map.fitBounds(bounds, {
+            padding: 50,
+            maxZoom: 12,
+            duration: 2000
+          });
+        }
+
       } catch (error) {
-        resultado.innerHTML = `<span class="text-red-600 font-bold">Error inesperado: ${error.message}</span>`;
+        resultadoContenido.innerHTML = `
+          <div class="p-3 bg-red-50 border-l-4 border-red-500 text-red-700">
+            <p class="font-bold">Error inesperado:</p>
+            <p class="text-sm mt-1">${error.message}</p>
+          </div>
+        `;
+        console.error('Error:', error);
       }
     });
   </script>
+
 </section>
