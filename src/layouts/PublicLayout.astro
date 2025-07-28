@@ -1,5 +1,5 @@
 ---
-/*import Analytics from '@vercel/analytics/astro'*/
+import Analytics from '@vercel/analytics/astro'
 import "@/styles/global.css";
 import Navbar from '@/shared/components/Navbar.astro';
 import Footer from '@/shared/components/Footer.astro';
@@ -34,8 +34,8 @@ const {
 		/>
 		<meta name="robots" content={robots.join(", ")} />
 		<meta http-equiv="Content-Language" content="es" />
-		<meta name="author" content="Trinup" />
-		<meta name="copyright" content="© 2025 Trinup" />
+		<meta name="author" content="PECO" />
+		<meta name="copyright" content="© 2025 PECO" />
 
 		<!-- Primary Meta Tags -->
 		<title>{title}</title>
@@ -60,10 +60,10 @@ const {
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={imagetwt} />
-		<meta name="twitter:site" content="@trinup" />
-		<meta name="twitter:creator" content="@trinup" />
+		<meta name="twitter:site" content="@peco" />
+		<meta name="twitter:creator" content="@peco" />
 
-		<!-- <Analytics /> -->
+		<Analytics />
 	</head>
 	<body class="min-h-screen flex flex-col">
 		<Navbar />
