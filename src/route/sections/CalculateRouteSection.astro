@@ -1,0 +1,127 @@
+---
+---
+
+
+<section class="pt-25 md:pt-20 ml-0 px-0 sm:px-4 md:ml-12 md:px-8 2xl:ml-24">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-4xl font-bold mb-6 text-theme-verdigris">Calcular Ruta</h2>
+
+    <form id="rutaForm" class="space-y-4">
+      <label class="block">
+        <span class="text-lg">Capacidad por vehículo (kg)</span>
+        <input type="number" name="capacidad" class="input" value="30" required />
+      </label>
+
+      <label class="block">
+        <span class="text-lg">Número de vehículos</span>
+        <input type="number" name="vehiculos" class="input" value="2" required />
+      </label>
+
+      <label class="block">
+        <span class="text-lg">Velocidad promedio (km/h)</span>
+        <input type="number" step="0.1" name="velocidad" class="input" value="10" required />
+      </label>
+
+      <label class="block">
+        <span class="text-lg">Tiempo máximo de ruta (horas)</span>
+        <input type="number" step="0.1" name="tiempo" class="input" value="2.5" required />
+      </label>
+
+      <label class="block">
+        <span class="text-lg">Selecciona el depósito</span>
+        <select name="deposito" class="input" required>
+          <option value="0">Depósito A (Puerto)</option>
+          <option value="1">Depósito B (Mercado 1)</option>
+          <option value="2">Depósito C (Mercado 2)</option>
+          <option value="3">Depósito D (Almacén)</option>
+        </select>
+      </label>
+
+      <button type="submit" class="bg-theme-verdigris text-white px-4 py-2 rounded mt-4">
+        Calcular Ruta
+      </button>
+    </form>
+
+    <div id="resultado" class="mt-8 text-lg text-gray-800"></div>
+  </div>
+
+  <style>
+    .input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+
+  <script is:inline>
+    const form = document.querySelector('#rutaForm');
+    const resultado = document.querySelector('#resultado');
+
+    const puntos = [
+      { id: 0, x: 0.0, y: 0.0, demanda: 0 },
+      { id: 1, x: 1.0, y: 1.0, demanda: 20 },
+      { id: 2, x: 2.0, y: 0.0, demanda: 15 },
+      { id: 3, x: 0.0, y: 2.0, demanda: 10 }
+    ];
+
+    const matriz = [
+      [0, 1.4, 2.0, 2.0],
+      [1.4, 0, 1.4, 2.2],
+      [2.0, 1.4, 0, 2.8],
+      [2.0, 2.2, 2.8, 0]
+    ];
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const capacidad = parseInt(data.get('capacidad'));
+      const vehiculos = parseInt(data.get('vehiculos'));
+      const velocidad = parseFloat(data.get('velocidad'));
+      const tiempo = parseFloat(data.get('tiempo'));
+      const deposito = parseInt(data.get('deposito'));
+
+      const body = {
+        puntos,
+        deposito_id: deposito,
+        capacidad_vehiculo: capacidad,
+        numero_vehiculos: vehiculos,
+        tiempo_maximo: tiempo,
+        velocidad_promedio: velocidad,
+        matriz_distancias: matriz
+      };
+
+      resultado.innerHTML = "Calculando ruta...";
+
+      try {
+        const res = await fetch('https://peco-backend-795306361872.europe-west1.run.app/resolver', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+          const error = await res.json();
+          resultado.innerHTML = `<span class="text-red-600 font-bold">Error ${res.status}: ${error.detail}</span>`;
+          return;
+        }
+
+        const json = await res.json();
+
+        resultado.innerHTML = `
+          <p><strong>Rutas generadas:</strong></p>
+          <ul class="list-disc ml-5">
+            ${json.rutas.map((ruta, i) => `<li>Camión ${i + 1}: ${ruta.join(' → ')}</li>`).join('')}
+          </ul>
+          <p class="mt-2">Distancia total: <strong>${json.distancia_total.toFixed(2)} km</strong></p>
+          <p>Tiempo máximo por camión: <strong>${json.tiempo_maximo_camion.toFixed(2)} h</strong></p>
+          <p>Generaciones procesadas: <strong>${json.generaciones}</strong></p>
+        `;
+      } catch (error) {
+        resultado.innerHTML = `<span class="text-red-600 font-bold">Error inesperado: ${error.message}</span>`;
+      }
+    });
+  </script>
+</section>
