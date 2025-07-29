@@ -11,7 +11,7 @@
         <form id="rutaForm" class="p-6 bg-white rounded-xl shadow-md sticky top-4">
           <!-- Capacidad por vehículo -->
           <div class="mb-6">
-            <label for="capacidad" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="capacidad" class="block text-sm font-medium text-theme-indigo-dye mb-1">
               Capacidad por vehículo (kg)
               <span class="text-red-500">*</span>
             </label>
@@ -21,13 +21,13 @@
               name="capacidad" 
               value="30" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              class="w-full px-4 py-2 border border-theme-verdigris rounded-md focus:ring-2 focus:ring-theme-sky-blue focus:border-theme-sky-blue transition duration-200"
             >
           </div>
 
           <!-- Número de vehículos -->
           <div class="mb-6">
-            <label for="vehiculos" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="vehiculos" class="block text-sm font-medium text-theme-indigo-dye mb-1">
               Número de vehículos
               <span class="text-red-500">*</span>
             </label>
@@ -37,13 +37,13 @@
               name="vehiculos" 
               value="2" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              class="w-full px-4 py-2 border border-theme-verdigris rounded-md focus:ring-2 focus:ring-theme-sky-blue focus:border-theme-indigo-dye transition duration-200"
             >
           </div>
 
           <!-- Velocidad promedio -->
           <div class="mb-6">
-            <label for="velocidad" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="velocidad" class="block text-sm font-medium text-theme-indigo-dye mb-1">
               Velocidad promedio (km/h)
               <span class="text-red-500">*</span>
             </label>
@@ -54,13 +54,13 @@
               name="velocidad" 
               value="10" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              class="w-full px-4 py-2 border border-theme-verdigris rounded-md focus:ring-2 focus:ring-theme-sky-blue focus:border-theme-sky-blue transition duration-200"
             >
           </div>
 
           <!-- Tiempo máximo de ruta -->
           <div class="mb-6">
-            <label for="tiempo" class="block text-sm font-medium text-gray-700 mb-1">
+            <label for="tiempo" class="block text-sm font-medium text-theme-indigo-dye mb-1">
               Tiempo máximo de ruta (horas)
               <span class="text-red-500">*</span>
             </label>
@@ -71,14 +71,14 @@
               name="tiempo" 
               value="2.5" 
               required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              class="w-full px-4 py-2 border border-theme-verdigris rounded-md focus:ring-2 focus:ring-theme-sky-blue focus:border-theme-sky-blue transition duration-200"
             >
           </div>
 
           <!-- Botón de envío -->
           <button 
             type="submit" 
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-md transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            class="w-full bg-theme-tiffany-blue hover:bg-theme-indigo-dye text-white font-medium py-3 px-4 rounded-md transition duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-theme-sky-blue focus:ring-offset-2"
           >
             Calcular Ruta
           </button>
@@ -88,19 +88,19 @@
       <!-- Mapa y Resultados -->
       <div class="lg:w-1/2 relative">
         <!-- Mapa -->
-        <div id="map" class="w-full h-[500px] rounded-lg border border-gray-300 shadow-sm relative"></div>
+        <div id="map" class="w-full h-[500px] rounded-lg border border-theme-verdigris shadow-sm relative"></div>
         
         <!-- Resultado como ventana flotante -->
         <div id="resultado" class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg border border-gray-200 z-10 transition-all duration-300 opacity-0 invisible max-h-[40%] overflow-y-auto">
           <div class="flex justify-between items-center mb-2">
-            <h3 class="font-bold text-lg text-gray-800">Resultados de la Ruta</h3>
-            <button id="cerrarResultado" class="text-gray-500 hover:text-gray-700">
+            <h3 class="font-bold text-lg text-theme-verdigris">Resultados de la Ruta</h3>
+            <button id="cerrarResultado" class="text-gray-500 hover:text-theme-verdigris">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
             </button>
           </div>
-          <div class="text-gray-700 space-y-2" id="resultadoContenido"></div>
+          <div class="text-theme-indigo-dye space-y-2" id="resultadoContenido"></div>
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@
             'line-cap': 'round'
           },
           paint: {
-            'line-color': '#3b82f6',
+            'line-color': '#38B6B2',
             'line-width': 6,
             'line-opacity': 1
           }
@@ -267,7 +267,7 @@
             source: markerLayerId,
             paint: {
               'circle-radius': 10,
-              'circle-color': '#3b82f6',
+              'circle-color': '#8FD3C0',
               'circle-stroke-width': 2,
               'circle-stroke-color': '#ffffff'
             }
@@ -311,7 +311,7 @@
 
       puntos.forEach(p => {
         const marker = new maplibregl.Marker({
-          color: p.id === 0 ? '#2ecc71' : '#e74c3c'
+          color: p.id === 0 ? '#8FD3C0' : '#0D181C'
         })
           .setLngLat([p.y, p.x])
           .setPopup(new maplibregl.Popup().setText(p.nombre))
@@ -389,7 +389,7 @@
             <div class="grid grid-cols-1 gap-2" id="lista-rutas">
               ${json.rutas.map((ruta, i) => `
                 <div 
-                  class="border-l-4 border-blue-500 pl-3 cursor-pointer hover:bg-gray-50 transition-colors ruta-item" 
+                  class="border-l-4 border-theme-sky-blue pl-3 cursor-pointer hover:bg-gray-50 transition-colors ruta-item" 
                   data-ruta-index="${i}"
                   onclick="mostrarRutaIndividual(${i})"
                 >
