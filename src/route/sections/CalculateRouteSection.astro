@@ -75,24 +75,6 @@
             >
           </div>
 
-          <!-- Selección de depósito -->
-          <div class="mb-8">
-            <label for="deposito" class="block text-sm font-medium text-gray-700 mb-1">
-              Selecciona el depósito
-              <span class="text-red-500">*</span>
-            </label>
-            <select 
-              id="deposito" 
-              name="deposito" 
-              required
-              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-            >
-              <option value="1">Depósito A</option>
-              <option value="2">Depósito B</option>
-              <option value="3">Depósito C</option>
-            </select>
-          </div>
-
           <!-- Botón de envío -->
           <button 
             type="submit" 
@@ -136,15 +118,15 @@
 
   <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
 
-  <script is:inline>
+<script is:inline>
     const form = document.querySelector('#rutaForm');
     const resultado = document.querySelector('#resultado');
 
     const puntos = [
-      { id: 0, nombre: 'INICIO - FIN', x: -9.0851, y: -78.5936 },
-      { id: 1, nombre: 'Depósito A', x: -9.0743, y: -78.5980 },
-      { id: 2, nombre: 'Depósito B', x: -9.0722, y: -78.5905 },
-      { id: 3, nombre: 'Depósito C', x: -9.0814, y: -78.5852 }
+      { id: 0, nombre: 'Depósito', x: -9.0851, y: -78.5936, demanda: 0 },
+      { id: 1, nombre: 'Destino A', x: -9.0743, y: -78.5980, demanda: 20 },
+      { id: 2, nombre: 'Destino B', x: -9.0722, y: -78.5905, demanda: 15 },
+      { id: 3, nombre: 'Destino C', x: -9.0814, y: -78.5852, demanda: 10 }
     ];
 
     const matriz = [
@@ -158,6 +140,8 @@
     let routeLayerIdCounter = 0;
     const layerIds = [];
     const arrowIconUrl = 'https://cdn-icons-png.flaticon.com/512/271/271228.png';
+    let rutasGlobales = [];
+    let puntosGlobales = puntos;
 
     function cargarFlecha() {
       if (map.hasImage('arrow')) return;
@@ -171,12 +155,148 @@
     }
 
     function limpiarRutasPrevias() {
-      layerIds.forEach(id => {
-        if (map.getLayer(id)) map.removeLayer(id);
-        if (map.getSource(id)) map.removeSource(id);
-        if (map.getLayer(id + '-arrow')) map.removeLayer(id + '-arrow');
+      // Eliminar primero las capas que usan las fuentes
+      const layersToRemove = layerIds.filter(id => map.getLayer(id));
+      const sourcesToRemove = layerIds.filter(id => map.getSource(id) && !map.getLayer(id));
+      
+      layersToRemove.forEach(id => {
+        try {
+          if (map.getLayer(id)) map.removeLayer(id);
+        } catch (error) {
+          console.warn(`Error al eliminar capa ${id}:`, error);
+        }
       });
+      
+      sourcesToRemove.forEach(id => {
+        try {
+          if (map.getSource(id)) map.removeSource(id);
+        } catch (error) {
+          console.warn(`Error al eliminar fuente ${id}:`, error);
+        }
+      });
+      
       layerIds.length = 0;
+    }
+
+    function mostrarRutaIndividual(index) {
+      // Verificar si ya existe la fuente y eliminarla primero
+      const sourceId = `ruta-activa-${index}`;
+      if (map.getSource(sourceId)) {
+        map.removeSource(sourceId);
+      }
+      
+      limpiarRutasPrevias();
+      
+      const ruta = rutasGlobales[index];
+      console.log('Mostrando ruta:', index, ruta);
+      
+      const coords = [
+        [puntosGlobales[0].y, puntosGlobales[0].x],
+        ...ruta.map(id => [puntosGlobales[id].y, puntosGlobales[id].x]),
+        [puntosGlobales[0].y, puntosGlobales[0].x]
+      ];
+
+      // Dibujar la ruta seleccionada
+      const layerId = `ruta-activa-${index}`;
+      try {
+        map.addSource(layerId, {
+          type: 'geojson',
+          data: {
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: coords
+            }
+          }
+        });
+        layerIds.push(layerId);
+
+        map.addLayer({
+          id: layerId,
+          type: 'line',
+          source: layerId,
+          layout: {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          paint: {
+            'line-color': '#3b82f6',
+            'line-width': 6,
+            'line-opacity': 1
+          }
+        });
+        layerIds.push(layerId);
+
+        // Añadir flecha
+        map.addLayer({
+          id: `${layerId}-arrow`,
+          type: 'symbol',
+          source: layerId,
+          layout: {
+            'symbol-placement': 'line',
+            'symbol-spacing': 50,
+            'icon-image': 'arrow',
+            'icon-size': 0.08,
+            'icon-allow-overlap': true
+          }
+        });
+        layerIds.push(`${layerId}-arrow`);
+
+        // Resaltar puntos de esta ruta
+        ruta.forEach(id => {
+          const markerLayerId = `marker-${id}-${index}`;
+          if (map.getSource(markerLayerId)) {
+            map.removeSource(markerLayerId);
+          }
+          
+          map.addSource(markerLayerId, {
+            type: 'geojson',
+            data: {
+              type: 'Feature',
+              geometry: {
+                type: 'Point',
+                coordinates: [puntosGlobales[id].y, puntosGlobales[id].x]
+              }
+            }
+          });
+          layerIds.push(markerLayerId);
+          
+          map.addLayer({
+            id: markerLayerId,
+            type: 'circle',
+            source: markerLayerId,
+            paint: {
+              'circle-radius': 10,
+              'circle-color': '#3b82f6',
+              'circle-stroke-width': 2,
+              'circle-stroke-color': '#ffffff'
+            }
+          });
+          layerIds.push(markerLayerId);
+        });
+
+        // Ajustar vista
+        const bounds = coords.reduce((bounds, coord) => {
+          return bounds.extend(coord);
+        }, new maplibregl.LngLatBounds(coords[0], coords[0]));
+
+        map.fitBounds(bounds, { padding: 100 });
+        
+        // Resaltar el ítem clickeado
+        document.querySelectorAll('.ruta-item').forEach(item => {
+          item.classList.remove('bg-blue-50', 'border-blue-700');
+          item.querySelector('.ruta-numero').classList.remove('text-white', 'bg-blue-600');
+        });
+        
+        const clickedItem = document.querySelector(`.ruta-item[data-ruta-index="${index}"]`);
+        if (clickedItem) {
+          clickedItem.classList.add('bg-blue-50', 'border-blue-700');
+          clickedItem.querySelector('.ruta-numero').classList.add('text-white', 'bg-blue-600');
+        }
+
+      } catch (error) {
+        console.error('Error al mostrar ruta:', error);
+      }
     }
 
     window.addEventListener('load', () => {
@@ -198,7 +318,6 @@
           .addTo(map);
       });
 
-
       cargarFlecha();
     });
 
@@ -211,7 +330,7 @@
       const vehiculos = parseInt(data.get('vehiculos'));
       const velocidad = parseFloat(data.get('velocidad'));
       const tiempo = parseFloat(data.get('tiempo'));
-      const deposito = parseInt(data.get('deposito'));
+      const deposito = 0;
 
       const puntosParaEnvio = puntos.map(p => ({
         id: p.id,
@@ -230,11 +349,12 @@
         matriz_distancias: matriz
       };
 
-      // Mostrar estado de carga en la ventana flotante
+      // Debug: Mostrar lo que se envía a la API
+      console.log('Enviando a la API:', JSON.stringify(body, null, 2));
+
       const resultadoContenido = document.getElementById('resultadoContenido');
       resultadoContenido.innerHTML = '<div class="flex justify-center py-4"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>';
       
-      // Mostrar ventana de resultados
       const resultado = document.getElementById('resultado');
       resultado.classList.remove('opacity-0', 'invisible');
       resultado.classList.add('opacity-100', 'visible');
@@ -248,13 +368,17 @@
 
         if (!res.ok) {
           const error = await res.json();
+          console.error('Error en la respuesta:', error);
           resultadoContenido.innerHTML = `<div class="text-red-600 font-bold p-2 bg-red-50 rounded">Error ${res.status}: ${error.detail}</div>`;
           return;
         }
 
         const json = await res.json();
+        rutasGlobales = json.rutas;
 
-        // Mostrar resultados en formato mejorado
+        // Debug: Mostrar lo que recibimos de la API
+        console.log('Respuesta de la API:', JSON.stringify(json, null, 2));
+
         resultadoContenido.innerHTML = `
           <div class="space-y-3">
             <div class="flex justify-between items-start">
@@ -262,15 +386,24 @@
               <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">${new Date().toLocaleTimeString()}</span>
             </div>
             
-            <div class="grid grid-cols-1 gap-2">
+            <div class="grid grid-cols-1 gap-2" id="lista-rutas">
               ${json.rutas.map((ruta, i) => `
-                <div class="border-l-4 border-blue-500 pl-3">
+                <div 
+                  class="border-l-4 border-blue-500 pl-3 cursor-pointer hover:bg-gray-50 transition-colors ruta-item" 
+                  data-ruta-index="${i}"
+                  onclick="mostrarRutaIndividual(${i})"
+                >
                   <div class="flex items-center justify-between">
-                    <span class="font-medium">Camión ${i + 1}:</span>
+                    <span class="font-medium">
+                      <span class="ruta-numero inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-800 text-sm mr-2">
+                        ${i + 1}
+                      </span>
+                      Camión ${i + 1}
+                    </span>
                     <span class="text-sm text-gray-600">${ruta.length} paradas</span>
                   </div>
-                  <div class="text-sm text-gray-700 mt-1 truncate" title="${ruta.join(' → ')}">
-                    ${ruta.join(' → ')}
+                  <div class="text-sm text-gray-700 mt-1 truncate">
+                    0 → ${ruta.join(' → ')} → 0
                   </div>
                 </div>
               `).join('')}
@@ -285,132 +418,25 @@
                 <span>Tiempo máximo:</span>
                 <span class="font-medium">${json.tiempo_maximo_camion.toFixed(2)} h</span>
               </div>
-              <div class="flex justify-between">
-                <span>Generaciones:</span>
-                <span class="font-medium">${json.generaciones}</span>
-              </div>
             </div>
           </div>
         `;
 
-        // Dibujar rutas en el mapa
-        json.rutas.forEach((ruta, i) => {
-          const coords = [
-            [puntos[0].y, puntos[0].x],
-            ...ruta.map(id => [puntos[id].y, puntos[id].x]),
-            [puntos[0].y, puntos[0].x]
-          ];
-
-          const geojson = {
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: coords
-            }
-          };
-
-          const layerId = `ruta-${routeLayerIdCounter++}`;
-          layerIds.push(layerId);
-
-          map.addSource(layerId, {
-            type: 'geojson',
-            data: geojson
-          });
-
-          map.addLayer({
-            id: layerId,
-            type: 'line',
-            source: layerId,
-            layout: {
-              'line-join': 'round',
-              'line-cap': 'round'
-            },
-            paint: {
-              'line-color': `hsl(${(i * 360 / json.rutas.length)}, 70%, 50%)`, // Colores distintos por ruta
-              'line-width': 4,
-              'line-dasharray': i % 2 === 0 ? [1, 0] : [2, 2] // Estilos alternados
-            }
-          });
-
-          // Añadir flechas de dirección
-          map.addLayer({
-            id: `${layerId}-arrow`,
-            type: 'symbol',
-            source: layerId,
-            layout: {
-              'symbol-placement': 'line',
-              'symbol-spacing': 50,
-              'icon-image': 'arrow',
-              'icon-size': 0.05,
-              'icon-allow-overlap': true,
-              'icon-ignore-placement': true
-            }
-          });
-
-          // Añadir etiquetas de número de ruta
-          ruta.forEach((id, idx) => {
-            const labelLayerId = `${layerId}-label-${idx}`;
-            map.addSource(labelLayerId, {
-              type: 'geojson',
-              data: {
-                type: 'Feature',
-                geometry: {
-                  type: 'Point',
-                  coordinates: [puntos[id].y, puntos[id].x]
-                },
-                properties: {
-                  title: `${i+1}`
-                }
-              }
-            });
-            
-            map.addLayer({
-              id: labelLayerId,
-              type: 'symbol',
-              source: labelLayerId,
-              layout: {
-                'text-field': ['get', 'title'],
-                'text-size': 12,
-                'text-offset': [0, 0.6],
-                'text-anchor': 'top'
-              },
-              paint: {
-                'text-color': '#ffffff',
-                'text-halo-color': `hsl(${(i * 360 / json.rutas.length)}, 70%, 50%)`,
-                'text-halo-width': 2
-              }
-            });
-            layerIds.push(labelLayerId);
-          });
-        });
-
-        // Ajustar vista del mapa para mostrar todas las rutas
-        if (json.rutas.length > 0 && puntos.length > 0) {
-          const allCoords = json.rutas.flatMap(ruta => 
-            ruta.map(id => [puntos[id].y, puntos[id].x])
-          ).concat([[puntos[0].y, puntos[0].x]]);
-          
-          const bounds = allCoords.reduce((bounds, coord) => {
-            return bounds.extend(coord);
-          }, new maplibregl.LngLatBounds(allCoords[0], allCoords[0]));
-
-          map.fitBounds(bounds, {
-            padding: 50,
-            maxZoom: 12,
-            duration: 2000
-          });
+        // Mostrar automáticamente la primera ruta
+        if (json.rutas.length > 0) {
+          mostrarRutaIndividual(0);
         }
 
       } catch (error) {
+        console.error('Error en la solicitud:', error);
         resultadoContenido.innerHTML = `
           <div class="p-3 bg-red-50 border-l-4 border-red-500 text-red-700">
             <p class="font-bold">Error inesperado:</p>
             <p class="text-sm mt-1">${error.message}</p>
           </div>
         `;
-        console.error('Error:', error);
       }
     });
-  </script>
+</script>
 
 </section>
