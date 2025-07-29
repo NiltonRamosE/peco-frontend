@@ -9,7 +9,7 @@ export const siteConfig = {
     },
     {
       label: "Conocenos",
-      href: "/conocenos",
+      href: "/about-us",
     },
   ],
   navMenuItems: [
@@ -19,7 +19,7 @@ export const siteConfig = {
     },
     {
       label: "Conocenos",
-      href: "/conocenos",
+      href: "/about-us",
     },
   ],
 };

@@ -1,0 +1,15 @@
+---
+import PublicLayout from '@/layouts/PublicLayout.astro';
+import AboutUsSection from '@/about/sections/AboutUsSection.astro';
+const robots = ["index", "follow"];
+const title = "PECO | Conocenos";
+const description = "Conocenos y descubre cómo PECO conecta a los consumidores con productos del mar frescos y de calidad, garantizando transparencia en la cadena de frío y el origen de los productos.";
+const keywords = ["PECO", "calcular ruta", "productos del mar", "cadena de frío", "transparencia en el origen"];
+const url = "https://peco-aptrv/about-us.vercel.app";
+const imageOG = "/card-twt.webp";
+const imagetwt = "/card-twt.webp";
+---
+
+<PublicLayout {robots} {title} {description} {keywords} {url} {imageOG} {imagetwt}>
+    <AboutUsSection />
+</PublicLayout>
